@@ -3,11 +3,12 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
     devenv.url = "github:cachix/devenv";
-    foundry.url = "github:shazow/foundry.nix/monthly";
+
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    foundry.url = "github:shazow/foundry.nix/monthly";
   };
 
   nixConfig = {
@@ -21,8 +22,8 @@
       nixpkgs,
       devenv,
       systems,
-      foundry,
       fenix,
+      foundry,
       ...
     }@inputs:
     let
@@ -53,10 +54,20 @@
                   solc
                 ];
 
-                languages.rust = {
-                  enable = true;
-                  channel = "stable";
-                  toolchain = fenix.packages.${pkgs.system}.latest;
+                languages = {
+                  rust = {
+                    enable = true;
+                    channel = "stable";
+                    toolchain = fenix.packages.${pkgs.system}.latest;
+                  };
+                  python = {
+                    enable = true;
+                    venv = {
+                      enable = true;
+                      requirements = builtins.readFile ./requirements.txt;
+                      quiet = true;
+                    };
+                  };
                 };
 
                 difftastic.enable = true;

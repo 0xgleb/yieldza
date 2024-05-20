@@ -1,1 +1,5 @@
+dash
 giza-cli
+giza-datasets
+pandas
+plotly
